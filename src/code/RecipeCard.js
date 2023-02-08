@@ -49,6 +49,9 @@ class RecipeCard extends HTMLElement {
         const cuisine = options?.cuisine;
         const difficulty = options?.difficulty;
 
+        const header = this.shadowRoot.querySelector('recipe-header');
+        const content = this.shadowRoot.querySelector('recipe-content');
+
         header.innerHTML =
         // contains the recipe name, cuisine, difficulty, expand and delete buttons
         `
