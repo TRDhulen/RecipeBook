@@ -1,6 +1,3 @@
-// import functions
-const func = require('./exports.js');
-
 /**
  * @class RecipeCard
  */
@@ -56,29 +53,29 @@ class RecipeCard extends HTMLElement {
         // contains the recipe name, cuisine, difficulty, expand and delete buttons
         `
             <span class="recipe-show name-show" style="width:210px">` +
-                func.capFirstEach(data.recipeName) + 
+                capFirstEach(data.recipeName) + 
             `</span>
             <input type="text" class="recipe-edit name-input" style="display:none">` +
-                func.capFirstEach(data.recipeName) + 
+                capFirstEach(data.recipeName) + 
             `</text>
             <span class="recipe-show cuisine-input" style="width:210px">` +
-                func.capFirst(data.cuisine) + 
+                capFirst(data.cuisine) + 
             `</span>
             <select style="display: none" class="recipe-edit cuisine-input" value="` +
             data.cuisine +
             `">
                 ${cuisine.map((option) =>
-                `<option value="${option}">${func.capFirstEach(option)})}</option>`)
+                `<option value="${option}">${capFirstEach(option)})}</option>`)
                 .join('')}
             </select>
             <span class="recipe-show difficulty-input" style="width:210px">` +
-                func.capFirst(data.difficulty) + 
+                capFirst(data.difficulty) + 
             `</span>
             <select style="display: none" class="recipe-edit difficulty-input" value="` +
             data.difficulty +
             `">
                 ${difficulty.map((option) =>
-                `<option value="${option}">${func.capFirstEach(option)})}</option>`)
+                `<option value="${option}">${capFirstEach(option)})}</option>`)
                 .join('')}
             </select>
             <span id="expandButton" class="material-icons expand-button recipe-show">expand_more</span>
@@ -275,3 +272,36 @@ customElements.define('recipe-card', RecipeCard);
  * dynamic functions/attributes - customElem.prototype.(name)
  * static functions - customElem.(name)
  */
+
+/**
+ * capitalize the first letter of a String
+ * @param {String} str single word String
+ * @returns String with first letter capitalized
+ */
+function capFirst(str) {
+    console.info("capFirst function called.");
+    if(str.length == 0) {
+        console.warn("String length expected: > 0, recieved: " + str.length, str);
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
+ * capitalize each first letter in a sentence String
+ * @param {String} sentence sentence String
+ * @returns String with each first letter capitalized
+ */
+function capFirstEach(sentence) {
+    console.info("capFirstEach function called.");
+    return splitStringIntoArray(sentence).map(word => capFirst(word)).join(' ');    
+}
+
+/**
+ * splits multi-word String into an array
+ * @param {String} sentence sentence String
+ * @returns array containing String elements
+ */
+function splitStringIntoArray(sentence) {
+    console.info("splitStringIntoArray function called.")
+    return sentence.split(' ');
+}
