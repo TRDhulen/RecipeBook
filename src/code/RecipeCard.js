@@ -1,5 +1,5 @@
 // import functions
-import * as func from './exports.mjs';
+const func = require('./exports.js');
 
 /**
  * @class RecipeCard
