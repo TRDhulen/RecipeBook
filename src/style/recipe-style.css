@@ -1,0 +1,43 @@
+.main-container {
+    background-color: #53cbfb;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    box-shadow: 3px 3px 5px gray;
+}
+
+.recipe-header {
+    width: 100%;
+    position: static;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.recipe-header > * {
+    margin: 10px;
+}
+
+.recipe-content {
+    width: 100%;
+    display: none;
+    overflow: hidden;
+    padding: 5px 10px 5px 10px;
+}
+
+.expand-button {
+    cursor: pointer;
+}
+
+.recipe-content > * {
+    position: relative;
+    flex: 1;
+}
+
+.material-icons {
+    cursor: pointer;
+}
+
+.ingredients, .directions, .notes {
+  width: 100%;
+}
