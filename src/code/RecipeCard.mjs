@@ -1,5 +1,5 @@
 // import functions
-import * as func from './exports.js';
+import * as func from './exports.mjs';
 
 /**
  * @class RecipeCard
