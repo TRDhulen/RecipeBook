@@ -52,8 +52,8 @@ class RecipeCard extends HTMLElement {
         const header = this.shadowRoot.querySelector('recipe-header');
         const content = this.shadowRoot.querySelector('recipe-content');
 
-        header.innerHTML =
         // contains the recipe name, cuisine, difficulty, expand and delete buttons
+        header.innerHTML =
         `
             <span class="recipe-show name-show" style="width:210px">` +
                 capFirstEach(data.recipeName) + 
@@ -85,8 +85,8 @@ class RecipeCard extends HTMLElement {
             <span class='material-icons delete-button' style='display:none;color:red'>delete</span>
         `
 
-        content.innerHTML =
         // contains the ingredients, directions, notes, edit, save and cancel buttons
+        content.innerHTML =
         `
         <div>
             <div>
@@ -122,7 +122,7 @@ class RecipeCard extends HTMLElement {
         `
 
         this.header = header;
-        // this.content = content
+        this.content = content;
         this.addEventListener(header, content);
     }
 
@@ -254,7 +254,7 @@ class RecipeCard extends HTMLElement {
      */
     getData() {
         const header = this.header;
-        const content = this.content
+        const content = this.content;
         console.debug('getData function called for: ', header.getElementsByClassName('name-input')[0].value);
         return data =  {
             recipeName: header.getElementsByClassName('name-input')[0].value,
