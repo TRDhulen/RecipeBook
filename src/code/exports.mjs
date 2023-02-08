@@ -1,5 +1,5 @@
-// modules.export single function/class/etc in .commonJS (also use require in importing file)
-// export = {} multiple functions/classes/etc in .mJS
+// modules.export single function/class/etc in commonJS (also use require in importing file)
+// export = {} multiple functions/classes/etc in ES6JS
 
 /**
  * capitalize the first letter of a String
