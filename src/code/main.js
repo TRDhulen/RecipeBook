@@ -63,7 +63,7 @@ function initStorage() {
  * @param {object} data list of RecipeCard objects
  */
 function addRecipesToDocument(data) {
-    console.debuf('addRecipesToDocument called with data var: ', JSON.stringify(data));
+    console.debug('addRecipesToDocument called with data var: ', JSON.stringify(data));
     data.forEach((element, index) => {
         const recipe = document.createElement('recipe-card');
         recipe.data = element;
