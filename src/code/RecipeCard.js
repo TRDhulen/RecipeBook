@@ -1,3 +1,5 @@
+import * as func from "./exports.js"
+
 /**
  * @class RecipeCard
  */
@@ -16,6 +18,11 @@ class RecipeCard extends HTMLElement {
 
         // create shadow DOM, open means shadowRoot is accessible
         const shadow = this.attachShadow({ mode: 'open' });
+        shadow.innerHTML =
+        `<link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />`
         // main container always visible
         const mainContainer = document.createElement('div');
         mainContainer.setAttribute('class', 'main-container');
@@ -40,6 +47,7 @@ class RecipeCard extends HTMLElement {
     // set func(param) called by obj.func = param
     set data(data) {
         // checks for falsy (empty) data
+        console.debug("Recipe: " + data?.recipeName);
         if(!data) return;
 
         this._data = data;
@@ -49,40 +57,40 @@ class RecipeCard extends HTMLElement {
         const cuisine = options?.cuisine;
         const difficulty = options?.difficulty;
 
-        const header = this.shadowRoot.querySelector('recipe-header');
-        const content = this.shadowRoot.querySelector('recipe-content');
+        const header = this.shadowRoot.querySelector('.recipe-header');
+        const content = this.shadowRoot.querySelector('.recipe-content');
 
         // contains the recipe name, cuisine, difficulty, expand and delete buttons
         header.innerHTML =
         `
             <span class="recipe-show name-show" style="width:210px">` +
-                capFirstEach(data.recipeName) + 
+                func.capFirstEach(data.recipeName) + 
             `</span>
-            <input type="text" class="recipe-edit name-input" style="display:none">` +
-                capFirstEach(data.recipeName) + 
-            `</text>
-            <span class="recipe-show cuisine-input" style="width:210px">` +
-                capFirst(data.cuisine) + 
+            <input type="String" class="recipe-edit name-input" style="display:none" value='` +
+                func.capFirstEach(data.recipeName) + 
+            `'>
+            <span class="recipe-show cuisine-show" style="width:210px">` +
+                func.capFirst(data.cuisine) + 
             `</span>
             <select style="display: none" class="recipe-edit cuisine-input" value="` +
             data.cuisine +
             `">
                 ${cuisine.map((option) =>
-                `<option value="${option}">${capFirstEach(option)})}</option>`)
+                `<option value="${option}">${func.capFirstEach(option)}</option>`)
                 .join('')}
             </select>
-            <span class="recipe-show difficulty-input" style="width:210px">` +
-                capFirst(data.difficulty) + 
+            <span class="recipe-show difficulty-show" style="width:210px">` +
+                func.capFirst(data.difficulty) + 
             `</span>
             <select style="display: none" class="recipe-edit difficulty-input" value="` +
             data.difficulty +
             `">
                 ${difficulty.map((option) =>
-                `<option value="${option}">${capFirstEach(option)})}</option>`)
+                `<option value="${option}">${func.capFirstEach(option)}</option>`)
                 .join('')}
             </select>
-            <span id="expandButton" class="material-icons expand-button recipe-show">expand_more</span>
-            <span class='material-icons delete-button' style='display:none;color:red'>delete</span>
+            <span id="expand-button" class="material-icons expand-button recipe-show">expand_more</span>
+            <span class='material-icons delete-button recipe-edit' style='display:none;color:red'>delete</span>
         `
 
         // contains the ingredients, directions, notes, edit, save and cancel buttons
@@ -90,6 +98,7 @@ class RecipeCard extends HTMLElement {
         `
         <div>
             <div>
+                <p>Ingredients:</p>
                 <p class="recipe-show ingredients-show ingredients">` +
                     data.ingredients +
                 `</p>
@@ -98,6 +107,7 @@ class RecipeCard extends HTMLElement {
                 `</textarea>
             </div>
             <div>
+                <p>Directions:</p>
                 <p class="recipe-show directions-show directions">` +
                     data.directions +
                 `</p>
@@ -106,6 +116,7 @@ class RecipeCard extends HTMLElement {
                 `</textarea>
             </div>
             <div>
+                <p>Notes:</p>
                 <p class="recipe-show notes-show notes">` +
                     data.notes +
                 `</p>
@@ -113,8 +124,16 @@ class RecipeCard extends HTMLElement {
                     data.notes +
                 `</textarea>
             </div>
+            <div>
+                <span class="author" style="display:inline-block;width:80px">Author: </span>
+                <span class="recipe-show author-show">` +
+          data.author +
+          `</span>
+          <input style="display:none;" class="recipe-edit author-input" type="String" value="` +
+          data.author +
+          `"/></span></div>
             <div style='position:absolute;bottom:0;right:20px'>
-                <span id='editButton' class='recipe-show material-icons edit-button' style='color:#ffba52'>edit</span>
+                <span id='edit-button' class='recipe-show material-icons edit-button' style='color:#ffba52'>edit</span>
                 <img src='src/assets/saveIcon.png' class='recipe-edit material-icons submit-button' style='display:none;color:green;width:24px'>
                 <img src='src/assets/undoIcon.png' class='recipe-edit material-icons cancel-button' style='display:none;color:red;width:24px'>
             </div>
@@ -123,7 +142,7 @@ class RecipeCard extends HTMLElement {
 
         this.header = header;
         this.content = content;
-        this.addEventListener(header, content);
+        this.allListener(header, content);
     }
 
     /**
@@ -135,7 +154,7 @@ class RecipeCard extends HTMLElement {
      */
     allListener(header, content) {
         // editButton listener
-        const editButton = header.querySelector('.edit-button');
+        const editButton = content.querySelector('.edit-button');
         editButton.addEventListener('click', function() {
             console.info("Edit button pressed.");
             showHide(header, content, true);
@@ -146,7 +165,7 @@ class RecipeCard extends HTMLElement {
         expandButton.addEventListener('click', function() {
             // alternate between show and hide
             console.info("Expand button pressed.");
-            let display = content.style.display === 'flex';
+            let display = (content.style.display === 'flex');
             content.style.display = (display ? 'none' : 'flex');
             expandButton.textContent = (display ? 'expand_more' : 'expand_less');
         })
@@ -156,7 +175,7 @@ class RecipeCard extends HTMLElement {
         deleteButton.addEventListener('click', function() {
             console.info("Delete button pressed.");
             // store path to main.js document.updateData()
-            const updateFunc = this.getRootNote().host.getRootNode().updateData;
+            const updateFunc = this.getRootNode().host.getRootNode().updateData;
             // remove the card from the document
             this.getRootNode().host.remove()
             // delete (update) local storage
@@ -230,13 +249,16 @@ class RecipeCard extends HTMLElement {
             const directI = content.getElementsByClassName('directions-input')[0];
             const notesS = content.getElementsByClassName('notes-show')[0];
             const notesI = content.getElementsByClassName('notes-input')[0];
+            const authorS = content.getElementsByClassName('author-show')[0];
+            const authorI = content.getElementsByClassName('author-input')[0];
             if(submit) {
                 rNameS.innerHTML = rNameI.value;
                 cuisineS.innerHTML = cuisineI.value;
                 diffS.innerHTML = diffI.value;
                 ingredientsS.innerHTML = ingredientsI.value;
                 directS.innerHTML = directI.value;
-                notesS.innerHTML = notesS.value;
+                notesS.innerHTML = notesI.value;
+                authorS.innerHTML = authorI.value;
             } else {
                 rNameI.value = rNameS.innerHTML;
                 cuisineI.value = cuisineS.innerHTML;
@@ -244,6 +266,7 @@ class RecipeCard extends HTMLElement {
                 ingredientsI.value = ingredientsS.innerHTML;
                 directI.value = directS.innerHTML;
                 notesI.value = notesS.innerHTML;
+                authorI.value = authorS.innerHTML;
             }
         }
     }
@@ -256,14 +279,16 @@ class RecipeCard extends HTMLElement {
         const header = this.header;
         const content = this.content;
         console.debug('getData function called for: ', header.getElementsByClassName('name-input')[0].value);
-        return data =  {
+        const data =  {
             recipeName: header.getElementsByClassName('name-input')[0].value,
             cuisine: header.getElementsByClassName('cuisine-input')[0].getAttribute('value'),
             difficulty: header.getElementsByClassName('difficulty-input')[0].getAttribute('value'),
             ingredients: content.getElementsByClassName('ingredients-input')[0].value,
             directions: content.getElementsByClassName('directions-input')[0].value,
-            notes: content.getElementsByClassName('notes-input')[0].value
+            notes: content.getElementsByClassName('notes-input')[0].value,
+            author: content.getElementsByClassName('author-input')[0].value
         }
+        return data;
     }
 }
 
@@ -275,36 +300,3 @@ customElements.define('recipe-card', RecipeCard);
  * dynamic functions/attributes - customElem.prototype.(name)
  * static functions - customElem.(name)
  */
-
-/**
- * capitalize the first letter of a String
- * @param {String} str single word String
- * @returns String with first letter capitalized
- */
-function capFirst(str) {
-    console.info("capFirst function called.");
-    if(str.length == 0) {
-        console.warn("String length expected: > 0, recieved: " + str.length, str);
-    }
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-/**
- * capitalize each first letter in a sentence String
- * @param {String} sentence sentence String
- * @returns String with each first letter capitalized
- */
-function capFirstEach(sentence) {
-    console.info("capFirstEach function called.");
-    return splitStringIntoArray(sentence).map(word => capFirst(word)).join(' ');    
-}
-
-/**
- * splits multi-word String into an array
- * @param {String} sentence sentence String
- * @returns array containing String elements
- */
-function splitStringIntoArray(sentence) {
-    console.info("splitStringIntoArray function called.")
-    return sentence.split(' ');
-}

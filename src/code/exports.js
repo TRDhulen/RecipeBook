@@ -6,12 +6,14 @@
  * @param {String} str single word String
  * @returns String with first letter capitalized
  */
-function capFirst(str) {
+export function capFirst(str) {
     console.info("capFirst function called.");
     if(str.length == 0) {
         console.warn("String length expected: > 0, recieved: " + str.length, str);
     }
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    let string = str.charAt(0).toUpperCase() + str.slice(1);
+    console.debug("capFirst Output: " + string)
+    return string;
 }
 
 /**
@@ -19,9 +21,13 @@ function capFirst(str) {
  * @param {String} sentence sentence String
  * @returns String with each first letter capitalized
  */
-function capFirstEach(sentence) {
+export function capFirstEach(sentence) {
+    console.group(capFirstEach);
     console.info("capFirstEach function called.");
-    return splitStringIntoArray(sentence).map(word => capFirst(word)).join(' ');    
+    let string = splitStringIntoArray(sentence).map(word => capFirst(word)).join(' ');
+    console.debug("capFirstEach Output: " + string);
+    console.groupEnd();
+    return string;    
 }
 
 /**
@@ -29,14 +35,8 @@ function capFirstEach(sentence) {
  * @param {String} sentence sentence String
  * @returns array containing String elements
  */
-function splitStringIntoArray(sentence) {
+export function splitStringIntoArray(sentence) {
     console.info("splitStringIntoArray function called.")
     return sentence.split(' ');
-}
-
-module.exports = {
-    capFirst: capFirst,
-    capFirstEach: capFirstEach,
-    splitStringIntoArray: splitStringIntoArray
 }
 // Possibly splice arrays splice(index, numOfElementsReplace, data)

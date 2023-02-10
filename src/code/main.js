@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', init)
  * ingredients (String):
  * directions (String):
  * notes (String):
+ * author (String):
  */
 function init() {
     console.info("init function called");
@@ -17,7 +18,8 @@ function init() {
     // add each recipe to document
     addRecipesToDocument(data);
     // add event listeners to form element
-    addRecipeListener();
+    const rContainer = document.getElementById('recipe-container');
+    addRecipeListener(rContainer);
 }
 
 /**
@@ -104,17 +106,18 @@ function addRecipeListener (rContainer) {
             const recipe = document.createElement('recipe-card');
 
             recipe.data = {
-                recipeName: '',
+                recipeName: 'Recipe Name:',
                 cuisine: '',
                 difficulty: '',
                 ingredients: '',
                 directions: '',
-                notes: ''
+                notes: '',
+                author: ''
             }
             // auto expand new recipe
-            recipe.shadowRoot.getElementById('expandButton').click();
+            recipe.shadowRoot.getElementById('expand-button').click();
             // activate edit new recipe
-            recipe.shadowRoot.getElementById('editButton').click();
+            recipe.shadowRoot.getElementById('edit-button').click();
             rContainer.insertBefore(recipe, document.getElementById('insertPoint'));
         })
 }
